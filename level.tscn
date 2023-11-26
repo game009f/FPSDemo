@@ -1,0 +1,129 @@
+[gd_scene load_steps=15 format=3 uid="uid://dgi4u06uti7lb"]
+
+[ext_resource type="Script" path="res://CharacterBody3D.gd" id="1_gfn4l"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_m0o2r"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_udnhc"]
+sky_material = SubResource("ProceduralSkyMaterial_m0o2r")
+
+[sub_resource type="Environment" id="Environment_4xupm"]
+background_mode = 2
+sky = SubResource("Sky_udnhc")
+ssao_enabled = true
+glow_enabled = true
+glow_blend_mode = 1
+
+[sub_resource type="BoxMesh" id="BoxMesh_l5xjr"]
+size = Vector3(222, 1, 222)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_lp8xm"]
+data = PackedVector3Array(-111, 0.5, 111, 111, 0.5, 111, -111, -0.5, 111, 111, 0.5, 111, 111, -0.5, 111, -111, -0.5, 111, 111, 0.5, -111, -111, 0.5, -111, 111, -0.5, -111, -111, 0.5, -111, -111, -0.5, -111, 111, -0.5, -111, 111, 0.5, 111, 111, 0.5, -111, 111, -0.5, 111, 111, 0.5, -111, 111, -0.5, -111, 111, -0.5, 111, -111, 0.5, -111, -111, 0.5, 111, -111, -0.5, -111, -111, 0.5, 111, -111, -0.5, 111, -111, -0.5, -111, 111, 0.5, 111, -111, 0.5, 111, 111, 0.5, -111, -111, 0.5, 111, -111, 0.5, -111, 111, 0.5, -111, -111, -0.5, 111, 111, -0.5, 111, -111, -0.5, -111, 111, -0.5, 111, 111, -0.5, -111, -111, -0.5, -111)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gdc4g"]
+size = Vector3(4, 2, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rcrrp"]
+albedo_color = Color(0.337255, 0.337255, 0.337255, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_l4mxg"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qy0um"]
+albedo_color = Color(0.443137, 0.694118, 0.631373, 1)
+emission_enabled = true
+emission = Color(0.992157, 0.992157, 0.992157, 1)
+emission_energy_multiplier = 1.98
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_p5vxi"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_rrgut"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_shqmw"]
+size = Vector3(0.05, 0.1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tcmrp"]
+metallic = 0.99
+roughness = 0.42
+
+[node name="Level" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_4xupm")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0.427822, -0.382951, 0.818729, -0.258782, 0.815995, 0.516898, 0, 3.29151, 0)
+visible = false
+light_energy = 0.2
+shadow_enabled = true
+
+[node name="Plane" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.477781, 0)
+mesh = SubResource("BoxMesh_l5xjr")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Plane"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Plane/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_lp8xm")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5486, 1.64568, -1.10953)
+layers = 524289
+light_color = Color(0.831373, 0.2, 0.478431, 1)
+omni_range = 2.88826
+
+[node name="Box" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.817515, -2.01712)
+mesh = SubResource("BoxMesh_gdc4g")
+surface_material_override/0 = SubResource("StandardMaterial3D_rcrrp")
+
+[node name="Sphere" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.68202, 0.719242, -1.52145)
+layers = 524289
+mesh = SubResource("SphereMesh_l4mxg")
+surface_material_override/0 = SubResource("StandardMaterial3D_qy0um")
+
+[node name="CharacterBody3D" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.17864, 0)
+script = ExtResource("1_gfn4l")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
+shape = SubResource("CapsuleShape3D_p5vxi")
+
+[node name="mesh" type="MeshInstance3D" parent="CharacterBody3D"]
+mesh = SubResource("CapsuleMesh_rrgut")
+skeleton = NodePath("../..")
+
+[node name="Gun" type="MeshInstance3D" parent="CharacterBody3D"]
+transform = Transform3D(0.963821, 0, 0.266549, 0, 1, 0, -0.266549, 0, 0.963821, 0.317441, 0.224836, -0.937)
+layers = 524288
+mesh = SubResource("BoxMesh_shqmw")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_tcmrp")
+
+[node name="RemoteTransform3D" type="RemoteTransform3D" parent="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.396358, 0)
+remote_path = NodePath("../../SubViewportContainer/SubViewport/Camera3D")
+
+[node name="Camera3D" type="Camera3D" parent="CharacterBody3D/RemoteTransform3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0394001, 0)
+cull_mask = 524287
+current = true
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(1024, 768)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="SubViewportContainer/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.575, 0)
+cull_mask = 524288
